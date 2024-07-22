@@ -4,61 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat with Notes</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Chat with Notes</h1>
-    <form id="uploadForm">
-        <input type="file" id="fileInput">
-        <button type="submit">Upload</button>
-    </form>
-    <div id="fileContent"></div>
-    <div id="chatContainer">
-        <div id="chatHistory"></div>
-        <input type="text" id="userInput" placeholder="Type your message...">
-        <button id="sendButton">Send</button>
-    </div>
-    <script>
-        document.getElementById('uploadForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var fileInput = document.getElementById('fileInput').files[0];
-            var formData = new FormData();
-            formData.append('file', fileInput);
+    <header>
+        <h1>Chat with Notes</h1>
+    </header>
+    
+    <main>
+        <section id="uploadSection">
+            <h2>File Upload</h2>
+            <form id="uploadForm" enctype="multipart/form-data">
+                <input type="file" id="fileInput" name="file" accept=".txt,.md,.pdf">
+                <button type="submit">Upload</button>
+            </form>
+        </section>
 
-            fetch('/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    document.getElementById('fileContent').innerText = data.content;
-                    document.getElementById('chatHistory').innerText = data.content + "\n";
-                }
-            });
-        });
+        <section id="fileContentSection">
+            <h2>File Content</h2>
+            <div id="fileContent"></div>
+        </section>
 
-        document.getElementById('sendButton').addEventListener('click', function() {
-            var userInput = document.getElementById('userInput').value;
-            var chatHistory = document.getElementById('chatHistory').innerText;
+        <section id="chatSection">
+            <h2>Chat</h2>
+            <div id="chatHistory"></div>
+            <form id="chatForm">
+                <input type="text" id="userInput" placeholder="Type your message here...">
+                <button type="submit" id="sendButton">Send</button>
+            </form>
+        </section>
+    </main>
 
-            fetch('/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({message: userInput, history: chatHistory})
-            })
-            .then(response => response.json())
-            .then(data => {
-                var chatHistoryDiv = document.getElementById('chatHistory');
-                chatHistoryDiv.innerText += "\nMe: " + userInput + "\nLlama3: " + data.response;
-                document.getElementById('userInput').value = '';
-                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; // Auto-scroll to bottom
-            });
-        });
-    </script>
+    <footer>
+        <p>&copy; 2024 Chat with Notes. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

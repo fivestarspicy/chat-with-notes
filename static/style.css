@@ -1,50 +1,100 @@
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+    line-height: 1.6;
+    color: #333;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f4;
 }
 
-h1 {
-    margin-bottom: 20px;
+header {
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+h1, h2 {
+    margin-bottom: 1rem;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 form {
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
 }
 
-#fileContent {
-    width: 80%;
-    max-width: 600px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 20px;
-    white-space: pre-wrap; /* Preserves whitespace */
-}
-
-#chatContainer {
-    width: 80%;
-    max-width: 600px;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 5px;
-}
-
-#chatHistory {
-    height: 300px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
+input[type="file"], input[type="text"] {
+    width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 10px;
-    white-space: pre-wrap; /* Preserves whitespace */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#fileContent, #chatHistory {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    max-height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    font-family: 'Courier New', monospace;
+}
+
+#chatForm {
+    display: flex;
+    gap: 10px;
 }
 
 #userInput {
-    width: calc(100% - 100px);
-    padding: 10px;
+    flex-grow: 1;
 }
 
-#sendButton {
-    padding: 10px;
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: #777;
+}
+
+@media (min-width: 768px) {
+    main {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    #uploadSection, #fileContentSection {
+        flex-basis: calc(50% - 1rem);
+    }
+    
+    #chatSection {
+        flex-basis: 100%;
+    }
 }

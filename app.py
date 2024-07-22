@@ -1,7 +1,9 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, session
 import requests
+import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)  # For session management
 
 def read_file(file_path):
     try:
@@ -11,8 +13,8 @@ def read_file(file_path):
     except Exception as e:
         return f"Error reading file: {e}"
 
-def generate_response(prompt, conversation_history):
-    full_prompt = conversation_history + "\n" + prompt
+def generate_response(prompt, conversation_history, file_content):
+    full_prompt = f"File content:\n{file_content}\n\nConversation history:\n{conversation_history}\n\nHuman: {prompt}\nAI:"
     url = 'http://localhost:11434/v1/completions'
     headers = {'Content-Type': 'application/json'}
     data = {
@@ -44,6 +46,7 @@ def upload():
         file_path = f"./uploads/{file.filename}"
         file.save(file_path)
         content = read_file(file_path)
+        session['file_content'] = content  # Store file content in session
         return jsonify({'content': content})
 
 @app.route('/chat', methods=['POST'])
@@ -51,7 +54,8 @@ def chat():
     data = request.json
     user_input = data['message']
     conversation_history = data['history']
-    response = generate_response(user_input, conversation_history)
+    file_content = session.get('file_content', '')  # Retrieve file content from session
+    response = generate_response(user_input, conversation_history, file_content)
     return jsonify({'response': response})
 
 if __name__ == "__main__":

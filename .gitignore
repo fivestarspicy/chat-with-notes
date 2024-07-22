@@ -6,6 +6,9 @@ env/
 # Uploads directory
 uploads/
 
+#Notes and instructions
+notes/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
