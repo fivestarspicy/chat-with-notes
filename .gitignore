@@ -1,1 +1,5 @@
 chat-with-notes-env/
+__pycache__/
+*.pyc
+uploads/
+
