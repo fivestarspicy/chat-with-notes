@@ -4,9 +4,12 @@ import requests
 app = Flask(__name__)
 
 def read_file(file_path):
-    with open(file_path, 'r') as file:
-        content = file.read()
-    return content
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+        return content
+    except Exception as e:
+        return f"Error reading file: {e}"
 
 def generate_response(prompt, conversation_history):
     full_prompt = conversation_history + "\n" + prompt
@@ -15,13 +18,16 @@ def generate_response(prompt, conversation_history):
     data = {
         'prompt': full_prompt,
         'model': 'llama3',
-        'max_tokens': 100
+        'max_tokens': 5000  # Adjust as needed
     }
-    response = requests.post(url, headers=headers, json=data)
-    if response.status_code == 200:
-        return response.json()['choices'][0]['text']
-    else:
-        return f"Error: {response.status_code} - {response.text}"
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        if response.status_code == 200:
+            return response.json()['choices'][0]['text']
+        else:
+            return f"Error: {response.status_code} - {response.text}"
+    except Exception as e:
+        return f"Error: {e}"
 
 @app.route('/')
 def index():

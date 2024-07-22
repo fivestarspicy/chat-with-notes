@@ -12,6 +12,7 @@
         <input type="file" id="fileInput">
         <button type="submit">Upload</button>
     </form>
+    <div id="fileContent"></div>
     <div id="chatContainer">
         <div id="chatHistory"></div>
         <input type="text" id="userInput" placeholder="Type your message...">
@@ -33,7 +34,8 @@
                 if (data.error) {
                     alert(data.error);
                 } else {
-                    document.getElementById('chatHistory').innerText = data.content;
+                    document.getElementById('fileContent').innerText = data.content;
+                    document.getElementById('chatHistory').innerText = data.content + "\n";
                 }
             });
         });
@@ -51,8 +53,10 @@
             })
             .then(response => response.json())
             .then(data => {
-                document.getElementById('chatHistory').innerText += "\nYou: " + userInput + "\nAI: " + data.response;
+                var chatHistoryDiv = document.getElementById('chatHistory');
+                chatHistoryDiv.innerText += "\nYou: " + userInput + "\nLlama3: " + data.response;
                 document.getElementById('userInput').value = '';
+                chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; // Auto-scroll to bottom
             });
         });
     </script>
