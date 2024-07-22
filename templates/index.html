@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Notes</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Chat with Notes</h1>
+    <form id="uploadForm">
+        <input type="file" id="fileInput">
+        <button type="submit">Upload</button>
+    </form>
+    <div id="chatContainer">
+        <div id="chatHistory"></div>
+        <input type="text" id="userInput" placeholder="Type your message...">
+        <button id="sendButton">Send</button>
+    </div>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var fileInput = document.getElementById('fileInput').files[0];
+            var formData = new FormData();
+            formData.append('file', fileInput);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('chatHistory').innerText = data.content;
+                }
+            });
+        });
+
+        document.getElementById('sendButton').addEventListener('click', function() {
+            var userInput = document.getElementById('userInput').value;
+            var chatHistory = document.getElementById('chatHistory').innerText;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({message: userInput, history: chatHistory})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('chatHistory').innerText += "\nYou: " + userInput + "\nAI: " + data.response;
+                document.getElementById('userInput').value = '';
+            });
+        });
+    </script>
+</body>
+</html>
