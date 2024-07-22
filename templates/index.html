@@ -54,7 +54,7 @@
             .then(response => response.json())
             .then(data => {
                 var chatHistoryDiv = document.getElementById('chatHistory');
-                chatHistoryDiv.innerText += "\nYou: " + userInput + "\nLlama3: " + data.response;
+                chatHistoryDiv.innerText += "\nMe: " + userInput + "\nLlama3: " + data.response;
                 document.getElementById('userInput').value = '';
                 chatHistoryDiv.scrollTop = chatHistoryDiv.scrollHeight; // Auto-scroll to bottom
             });
