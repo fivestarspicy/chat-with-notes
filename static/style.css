@@ -205,3 +205,19 @@ footer {
         transform: translateY(0);
     }
 }
+
+.drop-zone {
+    border: 2px dashed var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.drop-zone.dragover {
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+.drop-zone p {
+    margin-bottom: 10px;
+}

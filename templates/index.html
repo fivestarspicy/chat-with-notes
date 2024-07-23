@@ -16,13 +16,16 @@
         <section id="uploadSection" class="section">
             <h2>1. Upload Your Document</h2>
             <p class="info">Files are processed locally and never leave your device.</p>
-            <form id="uploadForm">
-                <div class="file-input-wrapper">
-                    <input type="file" id="fileInput" name="file">
-                    <label for="fileInput">Choose a file</label>
-                </div>
-                <button type="submit" id="uploadButton">Upload</button>
-            </form>
+            <div id="dropZone" class="drop-zone">
+                <p>Drag and drop your file here, or</p>
+                <form id="uploadForm">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="fileInput" name="file">
+                        <label for="fileInput">Choose a file</label>
+                    </div>
+                    <button type="submit" id="uploadButton">Upload</button>
+                </form>
+            </div>
         </section>
 
         <section id="fileContentSection" class="section">

@@ -9,19 +9,42 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const exportChatButton = document.getElementById('exportChat');
     const clearChatButton = document.getElementById('clearChat');
+    const dropZone = document.getElementById('dropZone');
 
     const allowedFileTypes = ['.txt', '.md', '.py', '.js', '.html', '.css', '.json'];
 
     // Load chat history from local storage
     loadChatHistory();
 
-    fileInput.addEventListener('change', () => {
-        const file = fileInput.files[0];
+    fileInput.addEventListener('change', handleFileSelect);
+
+    // Drag and drop functionality
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length) {
+            handleFileSelect({ target: { files: files } });
+        }
+    });
+
+    function handleFileSelect(e) {
+        const file = e.target.files[0];
         if (file) {
             const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
             if (allowedFileTypes.includes(fileExtension)) {
                 uploadButton.textContent = 'Upload ' + file.name;
                 uploadButton.disabled = false;
+                fileInput.files = e.target.files;  // Update the file input
             } else {
                 uploadButton.textContent = 'Invalid file type';
                 uploadButton.disabled = true;
@@ -31,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadButton.textContent = 'Upload';
             uploadButton.disabled = false;
         }
-    });
+    }
 
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
