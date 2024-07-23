@@ -17,9 +17,13 @@
             <h2>1. Upload Your Document</h2>
             <p class="info">Files are processed locally and never leave your device.</p>
             <form id="uploadForm" enctype="multipart/form-data">
-                <input type="file" id="fileInput" name="file" accept=".txt,.md,.pdf">
-                <button type="submit">Upload</button>
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" name="file" accept=".txt,.md,.pdf">
+                    <label for="fileInput">Choose a file</label>
+                </div>
+                <button type="submit" id="uploadButton">Upload</button>
             </form>
+            <p id="uploadStatus" class="status"></p>
         </section>
 
         <section id="fileContentSection">
@@ -36,6 +40,10 @@
                 <button type="submit" id="sendButton">Send</button>
             </form>
             <div id="loadingSpinner" class="spinner"></div>
+            <div class="chat-controls">
+                <button id="exportChat">Export Chat</button>
+                <button id="clearChat">Clear Chat</button>
+            </div>
         </section>
     </main>
 

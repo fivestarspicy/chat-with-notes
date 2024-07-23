@@ -1,3 +1,12 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #f9f9f9;
+    --box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
@@ -5,16 +14,17 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: var(--background-color);
 }
 
 header {
-    background-color: #2c3e50;
+    background-color: var(--secondary-color);
     color: white;
     text-align: center;
     padding: 2rem;
     margin-bottom: 2rem;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
 }
 
 h1 {
@@ -34,46 +44,75 @@ main {
 
 section {
     background-color: white;
-    border-radius: 8px;
+    border-radius: var(--border-radius);
     padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: var(--box-shadow);
 }
 
 h2 {
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
+    color: var(--secondary-color);
+    border-bottom: 2px solid var(--primary-color);
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
 }
 
 .info {
     background-color: #e8f4f8;
-    border-left: 4px solid #3498db;
+    border-left: 4px solid var(--primary-color);
     padding: 0.5rem 1rem;
     margin-bottom: 1rem;
     font-size: 0.9rem;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 form {
     margin-bottom: 1rem;
 }
 
-input[type="file"], input[type="text"] {
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.file-input-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
+.file-input-wrapper label {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: inline-block;
+    transition: var(--transition);
+}
+
+.file-input-wrapper:hover label {
+    background-color: #e0e0e0;
+}
+
+input[type="text"] {
     width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
 }
 
 button {
-    background-color: #3498db;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
 }
 
 button:hover {
@@ -82,7 +121,7 @@ button:hover {
 
 .content-box {
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     padding: 1rem;
     max-height: 300px;
     overflow-y: auto;
@@ -117,7 +156,7 @@ footer {
     width: 50px;
     height: 50px;
     border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
+    border-top: 5px solid var(--primary-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin: 20px auto;
@@ -126,4 +165,36 @@ footer {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.status {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.status.success {
+    color: #2ecc71;
+}
+
+.status.error {
+    color: #e74c3c;
+}
+
+.chat-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.message {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
