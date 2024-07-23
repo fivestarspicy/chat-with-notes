@@ -1,23 +1,29 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
     color: #333;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: #f9f9f9;
 }
 
 header {
-    background-color: #3498db;
+    background-color: #2c3e50;
     color: white;
     text-align: center;
-    padding: 1rem;
+    padding: 2rem;
     margin-bottom: 2rem;
+    border-radius: 8px;
 }
 
-h1, h2 {
-    margin-bottom: 1rem;
+h1 {
+    margin-bottom: 0.5rem;
+}
+
+.tagline {
+    font-style: italic;
+    opacity: 0.8;
 }
 
 main {
@@ -29,8 +35,23 @@ main {
 section {
     background-color: white;
     border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.info {
+    background-color: #e8f4f8;
+    border-left: 4px solid #3498db;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
 }
 
 form {
@@ -59,14 +80,20 @@ button:hover {
     background-color: #2980b9;
 }
 
-#fileContent, #chatHistory {
+.content-box {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 1rem;
     max-height: 300px;
     overflow-y: auto;
-    white-space: pre-wrap;
+    background-color: #fff;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#fileContent, #chatHistory {
     font-family: 'Courier New', monospace;
+    white-space: pre-wrap;
+    font-size: 0.9rem;
 }
 
 #chatForm {
@@ -82,19 +109,21 @@ footer {
     text-align: center;
     margin-top: 2rem;
     color: #777;
+    font-size: 0.9rem;
 }
 
-@media (min-width: 768px) {
-    main {
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    
-    #uploadSection, #fileContentSection {
-        flex-basis: calc(50% - 1rem);
-    }
-    
-    #chatSection {
-        flex-basis: 100%;
-    }
+.spinner {
+    display: none;
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with Notes</title>
+    <title>Local AI Chat with Notes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <header>
-        <h1>Chat with Notes</h1>
+        <h1>Local AI Chat with Notes</h1>
+        <p class="tagline">Privacy-focused, entirely local conversation with your documents</p>
     </header>
     
     <main>
         <section id="uploadSection">
-            <h2>File Upload</h2>
+            <h2>1. Upload Your Document</h2>
+            <p class="info">Files are processed locally and never leave your device.</p>
             <form id="uploadForm" enctype="multipart/form-data">
                 <input type="file" id="fileInput" name="file" accept=".txt,.md,.pdf">
                 <button type="submit">Upload</button>
@@ -21,22 +23,24 @@
         </section>
 
         <section id="fileContentSection">
-            <h2>File Content</h2>
-            <div id="fileContent"></div>
+            <h2>2. Review Your Document</h2>
+            <div id="fileContent" class="content-box"></div>
         </section>
 
         <section id="chatSection">
-            <h2>Chat</h2>
-            <div id="chatHistory"></div>
+            <h2>3. Chat About Your Document</h2>
+            <p class="info">Your conversation stays on your device, powered by local AI.</p>
+            <div id="chatHistory" class="content-box"></div>
             <form id="chatForm">
-                <input type="text" id="userInput" placeholder="Type your message here...">
+                <input type="text" id="userInput" placeholder="Ask about your document...">
                 <button type="submit" id="sendButton">Send</button>
             </form>
+            <div id="loadingSpinner" class="spinner"></div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2024 Chat with Notes. All rights reserved.</p>
+        <p>&copy; 2024 Local AI Chat with Notes. Your data stays with you.</p>
     </footer>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>

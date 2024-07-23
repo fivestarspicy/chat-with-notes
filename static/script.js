@@ -5,12 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatForm = document.getElementById('chatForm');
     const userInput = document.getElementById('userInput');
     const chatHistory = document.getElementById('chatHistory');
+    const loadingSpinner = document.getElementById('loadingSpinner');
 
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(uploadForm);
 
         try {
+            loadingSpinner.style.display = 'block';
             const response = await fetch('/upload', {
                 method: 'POST',
                 body: formData
@@ -24,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error:', error);
             fileContent.textContent = 'An error occurred while uploading the file.';
+        } finally {
+            loadingSpinner.style.display = 'none';
         }
     });
 
@@ -36,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.value = '';
 
         try {
+            loadingSpinner.style.display = 'block';
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
@@ -51,6 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error:', error);
             appendMessage('System', 'An error occurred while processing your message.');
+        } finally {
+            loadingSpinner.style.display = 'none';
         }
     });
 
