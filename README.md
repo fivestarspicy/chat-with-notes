@@ -1,6 +1,6 @@
 # Chat-with-Notes
 
-A simple web application built with Flask that allows users to upload text files, display their content, and interact with an AI chatbot to discuss the content. The application separates file content from chat history, supports persistent conversation history using local storage, and features a user-friendly interface.
+A simple web application built with Flask that allows users to upload text files, display their content, and interact with an AI chatbot to discuss the content.
 
 ## Prerequisites
 
