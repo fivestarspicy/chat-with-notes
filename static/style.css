@@ -69,6 +69,12 @@ form {
     margin-bottom: 1rem;
 }
 
+#uploadForm {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .file-input-wrapper {
     position: relative;
     overflow: hidden;
@@ -113,6 +119,7 @@ button {
     cursor: pointer;
     border-radius: var(--border-radius);
     transition: var(--transition);
+    height: 41px; /* Match the height of the input field */
 }
 
 button:hover {
@@ -138,10 +145,12 @@ button:hover {
 #chatForm {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 #userInput {
     flex-grow: 1;
+    margin-bottom: 0;
 }
 
 footer {
