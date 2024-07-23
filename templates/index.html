@@ -11,33 +11,32 @@
         <h1>Local AI Chat with Notes</h1>
         <p class="tagline">Privacy-focused, entirely local conversation with your documents</p>
     </header>
-    
+
     <main>
-        <section id="uploadSection">
+        <section id="uploadSection" class="section">
             <h2>1. Upload Your Document</h2>
             <p class="info">Files are processed locally and never leave your device.</p>
-            <form id="uploadForm" enctype="multipart/form-data">
+            <form id="uploadForm">
                 <div class="file-input-wrapper">
-                    <input type="file" id="fileInput" name="file" accept=".txt,.md,.pdf">
+                    <input type="file" id="fileInput" name="file">
                     <label for="fileInput">Choose a file</label>
                 </div>
                 <button type="submit" id="uploadButton">Upload</button>
             </form>
-            <p id="uploadStatus" class="status"></p>
         </section>
 
-        <section id="fileContentSection">
+        <section id="fileContentSection" class="section">
             <h2>2. Review Your Document</h2>
             <div id="fileContent" class="content-box"></div>
         </section>
 
-        <section id="chatSection">
+        <section id="chatSection" class="section">
             <h2>3. Chat About Your Document</h2>
             <p class="info">Your conversation stays on your device, powered by local AI.</p>
             <div id="chatHistory" class="content-box"></div>
             <form id="chatForm">
-                <input type="text" id="userInput" placeholder="Ask about your document...">
-                <button type="submit" id="sendButton">Send</button>
+                <input type="text" id="userInput" placeholder="Type your message here...">
+                <button type="submit">Send</button>
             </form>
             <div id="loadingSpinner" class="spinner"></div>
             <div class="chat-controls">
@@ -48,7 +47,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Local AI Chat with Notes. Your data stays with you.</p>
+        <p>© 2024 Local AI Chat with Notes. Your data stays with you.</p>
     </footer>
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>

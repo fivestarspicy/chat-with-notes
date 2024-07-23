@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadForm = document.getElementById('uploadForm');
     const fileInput = document.getElementById('fileInput');
     const uploadButton = document.getElementById('uploadButton');
-    const uploadStatus = document.getElementById('uploadStatus');
     const fileContent = document.getElementById('fileContent');
     const chatForm = document.getElementById('chatForm');
     const userInput = document.getElementById('userInput');
@@ -11,14 +10,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportChatButton = document.getElementById('exportChat');
     const clearChatButton = document.getElementById('clearChat');
 
+    const allowedFileTypes = ['.txt', '.md', '.py', '.js', '.html', '.css', '.json'];
+
     // Load chat history from local storage
     loadChatHistory();
 
     fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            uploadButton.textContent = 'Upload ' + fileInput.files[0].name;
+        const file = fileInput.files[0];
+        if (file) {
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            if (allowedFileTypes.includes(fileExtension)) {
+                uploadButton.textContent = 'Upload ' + file.name;
+                uploadButton.disabled = false;
+            } else {
+                uploadButton.textContent = 'Invalid file type';
+                uploadButton.disabled = true;
+                alert('Please select a valid file type: ' + allowedFileTypes.join(', '));
+            }
         } else {
             uploadButton.textContent = 'Upload';
+            uploadButton.disabled = false;
         }
     });
 
@@ -28,27 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             loadingSpinner.style.display = 'block';
-            uploadStatus.textContent = 'Uploading...';
-            uploadStatus.className = 'status';
-            
             const response = await fetch('/upload', {
                 method: 'POST',
                 body: formData
             });
             const data = await response.json();
             if (data.error) {
-                uploadStatus.textContent = `Error: ${data.error}`;
-                uploadStatus.className = 'status error';
+                alert(`Error: ${data.error}`);
                 fileContent.textContent = '';
             } else {
-                uploadStatus.textContent = 'File uploaded successfully!';
-                uploadStatus.className = 'status success';
                 fileContent.textContent = data.content;
             }
         } catch (error) {
             console.error('Error:', error);
-            uploadStatus.textContent = 'An error occurred while uploading the file.';
-            uploadStatus.className = 'status error';
+            alert('An error occurred while uploading the file.');
             fileContent.textContent = '';
         } finally {
             loadingSpinner.style.display = 'none';

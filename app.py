@@ -31,6 +31,10 @@ def generate_response(prompt, conversation_history, file_content):
     except Exception as e:
         return f"Error: {e}"
 
+def allowed_file(filename):
+    ALLOWED_EXTENSIONS = {'txt', 'md', 'py', 'js', 'html', 'css', 'json'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -42,12 +46,15 @@ def upload():
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No selected file'})
-    if file:
-        file_path = f"./uploads/{file.filename}"
-        file.save(file_path)
-        content = read_file(file_path)
-        session['file_content'] = content  # Store file content in session
-        return jsonify({'content': content})
+    if file and allowed_file(file.filename):
+        try:
+            content = file.read().decode('utf-8')
+            session['file_content'] = content  # Store file content in session
+            return jsonify({'content': content})
+        except Exception as e:
+            return jsonify({'error': f'Error reading file: {str(e)}'})
+    else:
+        return jsonify({'error': 'File type not allowed'})
 
 @app.route('/chat', methods=['POST'])
 def chat():
