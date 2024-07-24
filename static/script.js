@@ -147,6 +147,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function clearChat() {
+        try {
+            const response = await fetch('/clear_chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            });
+            const data = await response.json();
+            if (data.status !== 'success') {
+                throw new Error('Failed to clear chat history');
+            }
+            chatHistory.innerHTML = '';
+            localStorage.removeItem('chatHistory');
+        } catch (error) {
+            console.error('Error clearing chat:', error);
+            alert('An error occurred while clearing the chat. Please try again.');
+        }
+    }
+
+    async function clearAll() {
+        try {
+            const response = await fetch('/clear_all', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}),
+            });
+            const data = await response.json();
+            if (data.status !== 'success') {
+                throw new Error('Failed to clear all data');
+            }
+            chatHistory.innerHTML = '';
+            fileContent.textContent = '';
+            localStorage.clear();
+            // Force a hard reload of the page to clear any cached data
+            window.location.reload(true);
+        } catch (error) {
+            console.error('Error clearing all data:', error);
+            alert('An error occurred while clearing all data. Please try again.');
+        }
+    }
+
     exportChatButton.addEventListener('click', () => {
         const chatContent = chatHistory.innerText;
         const blob = new Blob([chatContent], { type: 'text/plain' });
@@ -160,18 +205,15 @@ document.addEventListener('DOMContentLoaded', () => {
         URL.revokeObjectURL(url);
     });
 
-    clearChatButton.addEventListener('click', () => {
+    clearChatButton.addEventListener('click', async () => {
         if (confirm('Are you sure you want to clear the chat history? This action cannot be undone.')) {
-            chatHistory.innerHTML = '';
-            saveChatHistory();
+            await clearChat();
         }
     });
 
-    clearAllButton.addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
-            chatHistory.innerHTML = '';
-            fileContent.innerHTML = '';
-            localStorage.clear();
+    clearAllButton.addEventListener('click', async () => {
+        if (confirm('Are you sure you want to clear all data? This will remove the chat history and uploaded file content. This action cannot be undone.')) {
+            await clearAll();
         }
     });
 });

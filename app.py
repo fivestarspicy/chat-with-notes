@@ -73,5 +73,15 @@ def chat():
         'full_history': conversation_history
     })
 
+@app.route('/clear_chat', methods=['POST'])
+def clear_chat():
+    session['conversation_history'] = ''
+    return jsonify({'status': 'success', 'message': 'Chat history cleared'})
+
+@app.route('/clear_all', methods=['POST'])
+def clear_all():
+    session.clear()
+    return jsonify({'status': 'success', 'message': 'All data cleared'})
+
 if __name__ == "__main__":
     app.run(debug=True)
