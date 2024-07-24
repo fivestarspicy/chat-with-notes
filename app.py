@@ -42,6 +42,7 @@ def upload():
         try:
             content = file.read().decode('utf-8')
             session['file_content'] = content  # Store file content in session
+            session['conversation_history'] = ''  # Reset conversation history
             return jsonify({'content': content})
         except Exception as e:
             return jsonify({'error': f'Error reading file: {str(e)}'})
@@ -52,10 +53,25 @@ def upload():
 def chat():
     data = request.json
     user_input = data['message']
-    conversation_history = data['history']
-    file_content = session.get('file_content', '')  # Retrieve file content from session
-    response = generate_response(user_input, conversation_history, file_content)
-    return jsonify({'response': response})
+    conversation_history = session.get('conversation_history', '')
+    file_content = session.get('file_content', '')
+
+    # Update conversation history with user input
+    conversation_history += f"\nHuman: {user_input}"
+
+    # Generate AI response
+    ai_response = generate_response(user_input, conversation_history, file_content)
+
+    # Update conversation history with AI response
+    conversation_history += f"\nAI: {ai_response}"
+
+    # Store updated history in session
+    session['conversation_history'] = conversation_history
+
+    return jsonify({
+        'response': ai_response,
+        'full_history': conversation_history
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
