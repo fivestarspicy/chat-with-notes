@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loadingSpinner');
     const exportChatButton = document.getElementById('exportChat');
     const clearChatButton = document.getElementById('clearChat');
+    const clearAllButton = document.getElementById('clearAll'); // New Button
     const dropZone = document.getElementById('dropZone');
 
     const allowedFileTypes = ['.txt', '.md', '.py', '.js', '.html', '.css', '.json'];
@@ -149,6 +150,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (confirm('Are you sure you want to clear the chat history? This action cannot be undone.')) {
             chatHistory.innerHTML = '';
             localStorage.removeItem('chatHistory');
+        }
+    });
+
+    clearAllButton.addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+            chatHistory.innerHTML = '';
+            fileContent.innerHTML = '';
+            localStorage.clear();
         }
     });
 });

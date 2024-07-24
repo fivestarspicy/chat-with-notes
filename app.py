@@ -5,14 +5,6 @@ import os
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # For session management
 
-def read_file(file_path):
-    try:
-        with open(file_path, 'r') as file:
-            content = file.read()
-        return content
-    except Exception as e:
-        return f"Error reading file: {e}"
-
 def generate_response(prompt, conversation_history, file_content):
     full_prompt = f"File content:\n{file_content}\n\nConversation history:\n{conversation_history}\n\nHuman: {prompt}\nAI:"
     url = 'http://localhost:11434/v1/completions'
