@@ -6,7 +6,10 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)  # For session management
 
 def generate_response(prompt, conversation_history, file_content):
-    full_prompt = f"File content:\n{file_content}\n\nConversation history:\n{conversation_history}\n\nHuman: {prompt}\nAI:"
+    # Ensure conversation history is a list of alternating human and AI messages
+    formatted_history = "\n".join(conversation_history)
+    
+    full_prompt = f"File content:\n{file_content}\n\nConversation history:\n{formatted_history}\n\nHuman: {prompt}\nAI:"
     url = 'http://localhost:11434/v1/completions'
     headers = {'Content-Type': 'application/json'}
     data = {
@@ -41,9 +44,22 @@ def upload():
     if file and allowed_file(file.filename):
         try:
             content = file.read().decode('utf-8')
-            session['file_content'] = content  # Store file content in session
-            session['conversation_history'] = ''  # Reset conversation history
-            return jsonify({'content': content})
+            action = request.form.get('action', 'upload')
+            
+            if action == 'clear':
+                session['conversation_history'] = []
+            elif action == 'keep':
+                # Keep the existing conversation history
+                pass
+            else:
+                # Default action (upload without existing chat)
+                session['conversation_history'] = []
+            
+            session['file_content'] = content
+            return jsonify({
+                'content': content,
+                'chatHistory': session.get('conversation_history', [])
+            })
         except Exception as e:
             return jsonify({'error': f'Error reading file: {str(e)}'})
     else:
@@ -53,17 +69,17 @@ def upload():
 def chat():
     data = request.json
     user_input = data['message']
-    conversation_history = session.get('conversation_history', '')
+    conversation_history = session.get('conversation_history', [])
     file_content = session.get('file_content', '')
 
-    # Update conversation history with user input
-    conversation_history += f"\nHuman: {user_input}"
+    # Add user input to conversation history
+    conversation_history.append(f"Human: {user_input}")
 
     # Generate AI response
     ai_response = generate_response(user_input, conversation_history, file_content)
 
-    # Update conversation history with AI response
-    conversation_history += f"\nAI: {ai_response}"
+    # Add AI response to conversation history
+    conversation_history.append(f"AI: {ai_response}")
 
     # Store updated history in session
     session['conversation_history'] = conversation_history
@@ -75,7 +91,7 @@ def chat():
 
 @app.route('/clear_chat', methods=['POST'])
 def clear_chat():
-    session['conversation_history'] = ''
+    session['conversation_history'] = []
     return jsonify({'status': 'success', 'message': 'Chat history cleared'})
 
 @app.route('/clear_all', methods=['POST'])

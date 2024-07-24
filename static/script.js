@@ -6,13 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatForm = document.getElementById('chatForm');
     const userInput = document.getElementById('userInput');
     const chatHistory = document.getElementById('chatHistory');
-    const loadingSpinner = document.getElementById('loadingSpinner');
     const exportChatButton = document.getElementById('exportChat');
     const clearChatButton = document.getElementById('clearChat');
     const clearAllButton = document.getElementById('clearAll');
     const dropZone = document.getElementById('dropZone');
 
     const allowedFileTypes = ['.txt', '.md', '.py', '.js', '.html', '.css', '.json'];
+
+    // Create loading overlay
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.className = 'loading-overlay';
+    loadingOverlay.innerHTML = '<div class="loader"></div>';
+    document.body.appendChild(loadingOverlay);
+
+    // Function to show/hide loading overlay
+    function setLoading(isLoading) {
+        loadingOverlay.style.display = isLoading ? 'flex' : 'none';
+    }
 
     // Load chat history from local storage
     loadChatHistory();
@@ -61,8 +71,19 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const formData = new FormData(uploadForm);
 
+        // Check if there's existing chat history
+        if (chatHistory.innerHTML.trim() !== '') {
+            const userChoice = await showUploadConfirmation();
+            if (userChoice === 'cancel') {
+                return;
+            }
+            formData.append('action', userChoice);
+        } else {
+            formData.append('action', 'upload');
+        }
+
         try {
-            loadingSpinner.style.display = 'block';
+            setLoading(true);
             const response = await fetch('/upload', {
                 method: 'POST',
                 body: formData
@@ -73,15 +94,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 fileContent.textContent = '';
             } else {
                 fileContent.textContent = data.content;
-                chatHistory.innerHTML = ''; // Clear chat history when new file is uploaded
-                saveChatHistory(); // Save empty chat history
+                if (data.chatHistory) {
+                    updateChatHistory(data.chatHistory);
+                }
             }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while uploading the file.');
             fileContent.textContent = '';
         } finally {
-            loadingSpinner.style.display = 'none';
+            setLoading(false);
         }
     });
 
@@ -94,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.value = '';
 
         try {
-            loadingSpinner.style.display = 'block';
+            setLoading(true);
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
@@ -111,9 +133,39 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             appendMessage('System', 'An error occurred while processing your message.');
         } finally {
-            loadingSpinner.style.display = 'none';
+            setLoading(false);
         }
     });
+
+    function showUploadConfirmation() {
+        return new Promise((resolve) => {
+            const confirmationDialog = document.createElement('div');
+            confirmationDialog.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 20px; border-radius: 5px; text-align: center;">
+                        <p>You have an existing chat history. What would you like to do?</p>
+                        <button id="clearChatBtn">Clear chat and upload</button>
+                        <button id="keepChatBtn">Keep chat and upload</button>
+                        <button id="cancelUploadBtn">Cancel upload</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(confirmationDialog);
+
+            document.getElementById('clearChatBtn').onclick = () => {
+                document.body.removeChild(confirmationDialog);
+                resolve('clear');
+            };
+            document.getElementById('keepChatBtn').onclick = () => {
+                document.body.removeChild(confirmationDialog);
+                resolve('keep');
+            };
+            document.getElementById('cancelUploadBtn').onclick = () => {
+                document.body.removeChild(confirmationDialog);
+                resolve('cancel');
+            };
+        });
+    }
 
     function appendMessage(sender, message) {
         const messageElement = document.createElement('div');
@@ -125,8 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateChatHistory(fullHistory) {
         chatHistory.innerHTML = ''; // Clear existing chat history
-        const messages = fullHistory.split('\n');
-        messages.forEach(message => {
+        fullHistory.forEach(message => {
             if (message.startsWith('Human: ')) {
                 appendMessage('You', message.substring(7));
             } else if (message.startsWith('AI: ')) {
@@ -149,6 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function clearChat() {
         try {
+            setLoading(true);
             const response = await fetch('/clear_chat', {
                 method: 'POST',
                 headers: {
@@ -165,11 +217,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error clearing chat:', error);
             alert('An error occurred while clearing the chat. Please try again.');
+        } finally {
+            setLoading(false);
         }
     }
 
     async function clearAll() {
         try {
+            setLoading(true);
             const response = await fetch('/clear_all', {
                 method: 'POST',
                 headers: {
@@ -189,6 +244,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error clearing all data:', error);
             alert('An error occurred while clearing all data. Please try again.');
+        } finally {
+            setLoading(false);
         }
     }
 
