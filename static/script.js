@@ -182,6 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 appendMessage('You', message.substring(7));
             } else if (message.startsWith('AI: ')) {
                 appendMessage('AI', message.substring(4));
+            } else if (message.startsWith('System: ')) {
+                appendMessage('System', message.substring(8));
             }
         });
         saveChatHistory();

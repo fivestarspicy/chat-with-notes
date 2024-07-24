@@ -6,7 +6,6 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)  # For session management
 
 def generate_response(prompt, conversation_history, file_content):
-    # Ensure conversation history is a list of alternating human and AI messages
     formatted_history = "\n".join(conversation_history)
     
     full_prompt = f"File content:\n{file_content}\n\nConversation history:\n{formatted_history}\n\nHuman: {prompt}\nAI:"
@@ -50,7 +49,8 @@ def upload():
                 session['conversation_history'] = []
             elif action == 'keep':
                 # Keep the existing conversation history
-                pass
+                if 'conversation_history' in session and session['conversation_history']:
+                    session['conversation_history'].append("System: New file uploaded. Previous context may or may not apply.")
             else:
                 # Default action (upload without existing chat)
                 session['conversation_history'] = []
