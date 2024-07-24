@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearAllButton = document.getElementById('clearAll');
     const dropZone = document.getElementById('dropZone');
 
-    const allowedFileTypes = ['.txt', '.md', '.py', '.js', '.html', '.css', '.json'];
+    const allowedFileTypes = ['.txt', '.md', '.py', '.js', '.html', '.css', '.json', '.pdf'];
 
     // Create loading overlay
     const loadingOverlay = document.createElement('div');

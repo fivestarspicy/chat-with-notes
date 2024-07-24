@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, jsonify, session
 import requests
 import os
+import pypdf
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # For session management
@@ -26,7 +27,7 @@ def generate_response(prompt, conversation_history, file_content):
         return f"Error: {e}"
 
 def allowed_file(filename):
-    ALLOWED_EXTENSIONS = {'txt', 'md', 'py', 'js', 'html', 'css', 'json'}
+    ALLOWED_EXTENSIONS = {'txt', 'md', 'py', 'js', 'html', 'css', 'json', 'pdf'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/')
@@ -42,7 +43,14 @@ def upload():
         return jsonify({'error': 'No selected file'})
     if file and allowed_file(file.filename):
         try:
-            content = file.read().decode('utf-8')
+            if file.filename.lower().endswith('.pdf'):
+                pdf_reader = pypdf.PdfReader(file)
+                content = ""
+                for page in pdf_reader.pages:
+                    content += page.extract_text()
+            else:
+                content = file.read().decode('utf-8')
+            
             action = request.form.get('action', 'upload')
             
             if action == 'clear':
