@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearChatButton = document.getElementById('clearChat');
     const clearAllButton = document.getElementById('clearAll');
     const dropZone = document.getElementById('dropZone');
+    const spinner = document.getElementById('spinner');
 
     const allowedFileTypes = ['.txt', '.md', '.py', '.js', '.html', '.css', '.json', '.pdf'];
 
@@ -24,8 +25,16 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingOverlay.style.display = isLoading ? 'flex' : 'none';
     }
 
+    // Function to show/hide spinner
+    function setSpinner(isLoading) {
+        spinner.style.display = isLoading ? 'block' : 'none';
+    }
+
     // Load chat history from local storage
     loadChatHistory();
+
+    // Load file content from local storage
+    loadFileContent();
 
     fileInput.addEventListener('change', handleFileSelect);
 
@@ -94,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 fileContent.textContent = '';
             } else {
                 fileContent.textContent = data.content;
+                localStorage.setItem('fileContent', data.content); // Store file content in localStorage
                 if (data.chatHistory) {
                     updateChatHistory(data.chatHistory);
                 }
@@ -116,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.value = '';
 
         try {
-            setLoading(true);
+            setSpinner(true);
             const response = await fetch('/chat', {
                 method: 'POST',
                 headers: {
@@ -133,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             appendMessage('System', 'An error occurred while processing your message.');
         } finally {
-            setLoading(false);
+            setSpinner(false);
         }
     });
 
@@ -197,6 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedHistory = localStorage.getItem('chatHistory');
         if (savedHistory) {
             chatHistory.innerHTML = savedHistory;
+        }
+    }
+
+    function loadFileContent() {
+        const savedFileContent = localStorage.getItem('fileContent');
+        if (savedFileContent) {
+            fileContent.textContent = savedFileContent;
         }
     }
 

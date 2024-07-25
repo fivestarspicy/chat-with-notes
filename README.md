@@ -66,7 +66,7 @@ Chat-with-Notes is a simple web application built with Flask that allows users t
 
 1. **Upload a Text File**
    - Use the file input to select and upload a text file.
-   - Supported file types include .txt, .md, .py, .js, .html, .css, and .json.
+   - Supported file types include .txt, .md, .py, .js, .html, .css, .json, and .pdf
    - The content of the uploaded file will be displayed in a separate section.
 
 2. **Chat with the AI**

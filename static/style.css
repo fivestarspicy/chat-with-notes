@@ -143,12 +143,51 @@ button:hover {
 
 #chatForm {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    margin-top: 20px; /* Adjust as needed for spacing from the chatbox */
 }
 
 #userInput {
-    flex-grow: 1;
-    margin-bottom: 0;
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px; /* Space between input and button */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    height: 40px; /* Ensure consistent height */
+}
+
+#spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin-left: 10px; /* Adjust as needed */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#sendButton {
+    padding: 0 20px; /* Adjust padding to ensure consistent height */
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 40px; /* Ensure consistent height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#sendButton:hover {
+    background-color: #0056b3;
 }
 
 footer {
@@ -222,3 +261,16 @@ footer {
     margin-bottom: 10px;
 }
 
+.message.you-message {
+    background-color: #d1e7f8; /* Light blue background for User messages */
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.message.ai-message {
+    background-color: #f0f0f0; /* Light grey background for AI messages */
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}

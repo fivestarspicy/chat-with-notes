@@ -21,7 +21,7 @@
                 <form id="uploadForm">
                     <div class="file-input-wrapper">
                         <input type="file" id="fileInput" name="file">
-                        <label for="fileInput">Choose a file</label>
+                        <label for="fileInput" id="fileLabel">Choose a file</label>
                     </div>
                     <button type="submit" id="uploadButton">Upload</button>
                 </form>
@@ -38,15 +38,15 @@
             <p class="info">Your conversation stays on your device, powered by local AI.</p>
             <div id="chatHistory" class="content-box"></div>
             <form id="chatForm">
-                <input type="text" id="userInput" placeholder="Type your message here...">
-                <button type="submit">Send</button>
+                <input type="text" id="userInput" placeholder="Type your message here..." style="margin-top: 20px;">
+                <button type="submit" id="sendButton">Send</button>
             </form>
-            <div id="loadingSpinner" class="spinner"></div>
             <div class="chat-controls">
                 <button id="exportChat">Export Chat</button>
                 <button id="clearChat">Clear Chat</button>
                 <button id="clearAll">Clear All Data</button>
             </div>
+            <div id="spinner" class="spinner" style="display: none;"></div>
         </section>
     </main>
 
