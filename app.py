@@ -14,7 +14,7 @@ def generate_response(prompt, conversation_history, file_content):
     headers = {'Content-Type': 'application/json'}
     data = {
         'prompt': full_prompt,
-        'model': 'llama3',
+        'model': 'llama3.1',
         'max_tokens': 5000  # Adjust as needed
     }
     try:
