@@ -1,3 +1,11 @@
+
+
+
+https://github.com/user-attachments/assets/cc56bca1-4dca-44e3-bdf7-35163e7f6718
+
+
+
+
 # Chat-with-Notes
 
 Chat-with-Notes is a simple web application built with Flask that allows users to upload text files, display their content, and interact with an AI chatbot to discuss the content. The application uses a locally running Ollama Llama 3.1 (8B) model for AI responses, ensuring privacy and data security.
